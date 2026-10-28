@@ -1,0 +1,19 @@
+{
+  "tool": "Built-in image_gen",
+  "reference": "original.png",
+  "turnaround": {
+    "file": "turnaround.png",
+    "prompt": "Use case: stylized-concept. Asset type: 3D modeling turnaround reference sheet. Input image: definitive character identity reference. Create one wide four-panel model sheet of THIS EXACT alpaca-bird alebrije, showing front, left profile, right profile, and rear. Full body in each panel at identical scale, feet on same baseline, orthographic camera, neutral cream background, no labels or text. Preserve long graceful cream alpaca neck, kind expressive brown eyes, short rounded alpaca muzzle, tall pointed ears, orange/red/teal cockatiel crest, plump horizontal wool body, exactly two long slender ostrich legs and clawed bird feet, two broad feather wings raised and spread, short fanned colorful feather tail. Preserve matte hand-painted wooden sculpture/gouache texture, orange marigold flowers, teal leafy stems, red geometric bands, cream dots. All four views show the same anatomy, same wing root placement at upper sides of torso, same pose, same proportions. Wings have real thickness and individually layered feathers; do not add arms, quadruped legs, horns, clothing, or change species. Infer unseen back markings consistently from reference. This is a precise turnaround of the supplied character, not a redesign."
+  },
+  "body": {
+    "file": "body-paint.png",
+    "prompt": "Use case: stylized-concept. Asset type: seamless square base-color texture for UV mapping onto a 3D hand-painted alebrije sculpture. Input image is the source for exact palette, brushwork, motifs. Generate a flat evenly lit edge-to-edge cream parchment/ivory painted wood surface covered in sparse Mexican folk botanical painting: large orange marigold flowers with rust-red centers, graceful teal-green stems and paired long leaves, scattered tiny red and orange dots, a few small red/teal stepped diamond bands. Cream negative space occupies 65 percent. Motif scale: about 4 large flowers across the width. Hand-painted irregular gouache edges and subtle fine brush scratches. All flowers and leaves flat painted, no shadows, no perspective, no actual character or animal, no borders or text. Texture should repeat seamlessly at all edges. Warm ivory not white; burnt orange, muted teal, brick red and golden ochre.",
+    "runtime": "../../public/character/body-paint.webp"
+  },
+  "feathers": {
+    "file": "feather-paint.png",
+    "prompt": "Use case: stylized-concept. Asset type: square flat color texture for painting actual 3D feather geometry. Input reference defines palette and handcrafted style. Create an edge-to-edge flat evenly lit hand-painted wood surface, predominately rich marigold orange and golden ochre. Scatter elongated teal leaf shapes and brick-red petal shapes in vertical rhythmic rows, small cream stippled dots and fine dry-brush scratches. At least 60 percent orange ochre ground. Pattern about three large leaf shapes across image. Gentle irregular paint edges, visible fine brush strokes, aged gouache. Seamless edges. NO actual feathers, NO objects, NO animal, NO scene, NO perspective, NO shadows, NO text, no panel borders. This image will be UV mapped onto individually sculpted feathers, so the leaf motif is painted decoration only.",
+    "runtime": "../../public/character/feather-paint.webp"
+  },
+  "encoding": "Runtime copies encoded as WebP quality 92 with sharp; source pixels and original PNGs retained."
+}

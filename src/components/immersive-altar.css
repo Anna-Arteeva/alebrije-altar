@@ -1,0 +1,357 @@
+/* The room and its offerings use the same projected world coordinates. */
+.ofrenda-home { background: #100b16; }
+.ofrenda-home::before { display: none; }
+.ofrenda-home .ofrenda-room {
+  padding: 0;
+  min-height: 100dvh;
+  background: #100b16;
+  box-shadow: none;
+  overflow: hidden;
+}
+.ofrenda-home .ofrenda-room::before { display: none; }
+.ofrenda-home .ofrenda-tradition {
+  position: absolute;
+  top: 8px;
+  right: 0;
+  z-index: 5;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 10px;
+  letter-spacing: .14em;
+  color: #d5bc88;
+  cursor: pointer;
+}
+.ofrenda-home .ofrenda-tradition:hover { color: #ffe1a5; }
+.immersive-stage {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: 100dvh;
+  min-height: 680px;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 28% 65%, #47252b66, transparent 45%),
+    radial-gradient(ellipse at 45% 42%, #46205288, transparent 65%),
+    repeating-linear-gradient(90deg, #100b16 0, #241326 20px, #160d1c 39px, #0d0912 55px);
+}
+.immersive-stage > canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 1.4s ease; }
+.immersive-stage[data-scene-status="ready"] > canvas { opacity: 1; }
+.immersive-stage[data-scene-status="ready"] { cursor: grab; touch-action: pan-y; user-select: none; }
+.immersive-stage:focus-visible { outline: 2px solid #e4c190; outline-offset: -4px; }
+.immersive-stage[data-dragging="true"], .immersive-stage[data-dragging="true"] * { cursor: grabbing; }
+.spatial-offerings { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0; transition: opacity 1s ease .3s; }
+.immersive-stage[data-scene-status="ready"] .spatial-offerings { opacity: 1; }
+.immersive-stage:not([data-scene-status="ready"]) .spatial-item { visibility: hidden; }
+/* Camera projection owns these transforms; CSS transitions would lag behind the canvas. */
+.spatial-item { position: absolute; top: 0; left: 0; pointer-events: auto; will-change: transform; transition: none; }
+.spatial-portrait { z-index: 3; transform-origin: 0 0; container-type: inline-size; }
+.spatial-keepsake { z-index: 4; }
+.spatial-hotspot { z-index: 2; }
+.spatial-item:has(:focus-visible), .spatial-item:hover { z-index: 10; }
+.spatial-portrait .portrait-invitation,
+.spatial-portrait .ofrenda-portrait {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+  cursor: pointer;
+}
+.spatial-portrait button::before,
+.spatial-portrait button::after {
+  content: "";
+  position: absolute;
+  inset: var(--frame-inset-y) var(--frame-inset-x);
+  pointer-events: none;
+}
+.spatial-portrait button::before { background: linear-gradient(135deg, #302336, #1c1523); }
+.spatial-portrait button::after {
+  background: linear-gradient(120deg, #a26dd012, transparent 50%), linear-gradient(0deg, #e8954820, transparent 45%);
+  box-shadow: inset 0 0 9px 2px #09061066;
+}
+/* Light the photo like the altar around it: multiply acts as the scene's light falling on the print —
+   violet ambient from above, candle amber rising from the shelf, falling off into shadow at the edges. */
+.spatial-portrait .ofrenda-portrait::after {
+  background:
+    radial-gradient(ellipse 120% 60% at 50% 108%, #ffc58a, transparent 70%),
+    linear-gradient(170deg, #8466b4 0%, #a98bbd 45%, #c99a96 100%);
+  box-shadow: inset 0 0 14px 4px #1a0f26b3;
+  mix-blend-mode: multiply;
+}
+.spatial-portrait .ofrenda-portrait img { filter: saturate(.8) contrast(1.06); }
+.spatial-portrait .portrait-name { z-index: 1; }
+.spatial-portrait button:focus-visible { outline: 2px solid #e4c190; outline-offset: 4px; }
+.spatial-portrait .portrait-invitation {
+  gap: 6cqw;
+  padding: calc(var(--frame-inset-y) + 5%) calc(var(--frame-inset-x) + 2%);
+  font-size: 11cqw;
+  color: #dfc6df;
+  text-shadow: 0 1px #130b1c80;
+}
+.spatial-portrait .portrait-invitation > span { position: relative; }
+.spatial-portrait .portrait-flower { font-size: 22cqw; color: #bc8cbe; }
+.spatial-portrait .portrait-plus { font-size: 17cqw; }
+.spatial-portrait .ofrenda-portrait { display: block; }
+.spatial-portrait .ofrenda-portrait img, .spatial-portrait .portrait-initial {
+  position: absolute;
+  inset: var(--frame-inset-y) var(--frame-inset-x);
+  width: calc(100% - var(--frame-inset-x) * 2);
+  height: calc(100% - var(--frame-inset-y) * 2);
+  object-fit: cover;
+}
+.spatial-portrait .portrait-initial { font-size: 40cqw; color: #c4a18c; }
+.spatial-portrait .portrait-name {
+  position: absolute;
+  inset: auto var(--frame-inset-x) var(--frame-inset-y);
+  padding: 12cqw 3cqw 4cqw;
+  color: #fff0d4;
+  background: linear-gradient(transparent, #1d180ecc);
+  font-size: 16cqw;
+  line-height: 1.2;
+  max-height: 100%;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.spatial-keepsake .offering-object { width: 100%; padding: 0; background: none; }
+.spatial-keepsake .offering-object > img { width: 100%; height: auto; max-height: 95px; object-fit: contain; filter: drop-shadow(3px 7px 4px #15100b99); }
+.sculpted-offering {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  outline-offset: 5px;
+}
+.offering-indicator {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  border: 1px solid #f3d6a45c;
+  border-radius: 50%;
+  color: #f5dfb6;
+  background: #25182f99;
+  font-size: 12px;
+  opacity: .45;
+  transition: opacity .25s, scale .25s;
+  backdrop-filter: blur(5px);
+}
+.sculpted-label {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  padding: 8px 12px;
+  border: 1px solid #b58bca55;
+  border-radius: 4px;
+  background: #211529f2;
+  color: #eddaeb;
+  white-space: nowrap;
+  font-family: var(--font-story);
+  font-size: 12px;
+  opacity: 0;
+  visibility: hidden;
+  translate: -50% 4px;
+  transition: opacity .2s, translate .2s, visibility .2s;
+  box-shadow: 0 8px 20px #09061088;
+  pointer-events: none;
+}
+.sculpted-offering:hover .offering-indicator, .sculpted-offering:focus-visible .offering-indicator { opacity: 1; scale: 1.15; }
+.sculpted-offering:hover .sculpted-label, .sculpted-offering:focus-visible .sculpted-label { opacity: 1; visibility: visible; translate: -50% 0; }
+.scene-vignette { position: absolute; z-index: 1; inset: 0; pointer-events: none; background: linear-gradient(180deg, #0c071299, transparent 18% 80%, #0c071366), radial-gradient(ellipse at 38% 50%, transparent 32%, #10081949 85%); }
+.scene-invitation {
+  position: absolute;
+  z-index: 2;
+  bottom: 24px;
+  left: 0;
+  width: calc(100% - var(--guide-column) - var(--guide-inset));
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-story);
+  font-size: 13px;
+  color: #e4cda4;
+  text-shadow: 0 2px 10px #090510;
+  pointer-events: none;
+}
+.scene-invitation > span[aria-hidden] { display: block; margin-bottom: 6px; font-size: 20px; color: #c6a775; }
+.scene-loading { position: absolute; top: 50%; left: 32%; translate: -50% -50%; color: #e6d4af; font-family: var(--font-story); font-size: 16px; }
+.scene-motes { position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; }
+.scene-motes i {
+  position: absolute;
+  left: calc(8% + var(--mote-i) * 5.1%);
+  top: calc(18% + mod(var(--mote-i) * 17, 65) * 1%);
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #edc47c;
+  box-shadow: 0 0 8px 1px #f4bf6570;
+  animation: ofrenda-mote calc(7s + var(--mote-i) * .7s) ease-in-out infinite alternate;
+  animation-delay: calc(var(--mote-i) * -.9s);
+}
+@keyframes ofrenda-mote { from { opacity: 0; translate: 0 12px; } 50% { opacity: .6; } to { opacity: .1; translate: 12px -25px; } }
+.ofrenda-home .ofrenda-conversation::before { background: linear-gradient(90deg, transparent, #100b16b3 45%, #100b16ed); }
+.ofrenda-home .guide-stage > img { filter: drop-shadow(0 16px 16px #090610cc) drop-shadow(-10px 0 22px #e8ac5526); }
+.immersive-fallback { position: relative; width: calc(100% - var(--guide-column)); height: 100%; }
+.immersive-fallback .ofrenda-scene { height: 100%; width: auto; max-width: 100%; filter: none; }
+.immersive-fallback .ofrenda-scene::before { background: radial-gradient(ellipse at 45% 50%, #7c35bb30, transparent 68%); }
+/* Tint only built-in scenery, leaving personal photos and keepsakes untouched. */
+.immersive-fallback .altar-plate { filter: grayscale(1) sepia(.9) saturate(1.3) hue-rotate(325deg) brightness(.28) drop-shadow(-3px 0 6px #a657d680); }
+.immersive-fallback .altar-botanical,
+.immersive-fallback .offering-hotspot > img,
+.immersive-fallback .offering-hotspot > svg { filter: grayscale(1) sepia(1) saturate(1.6) hue-rotate(225deg) brightness(.28) drop-shadow(-3px 0 5px #a657d64d); }
+.immersive-fallback .portrait-invitation,
+.immersive-fallback .ofrenda-portrait {
+  width: clamp(72px, 12vw, 130px);
+  max-width: 45%;
+  min-width: 0;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  padding: 8px;
+  border: 6px solid transparent;
+  border-radius: 0;
+  outline: 1px solid #ac7449;
+  background: linear-gradient(135deg, #35263e, #211827) padding-box,
+    repeating-conic-gradient(#514971 0% 25%, #312a4e 0% 50%) 0 0 / 7px 7px border-box;
+  color: #dfc6df;
+  box-shadow: inset 0 0 0 1px #ae754a, inset 0 0 0 4px #211827, 3px 6px 8px #090610aa, -2px 0 6px #a457cc33;
+  transform: none;
+}
+.immersive-fallback .portrait-invitation::after,
+.immersive-fallback .ofrenda-portrait::after { content: ""; position: absolute; inset: 2px; border: 1px dashed #ad774d; pointer-events: none; }
+.immersive-fallback .portrait-invitation { padding: 5px 3px; gap: clamp(2px, .4vw, 6px); font-size: clamp(8px, 1vw, 12px); }
+.immersive-fallback .portrait-flower { font-size: clamp(14px, 2vw, 22px); }
+.immersive-fallback .portrait-plus { font-size: 12px; }
+.immersive-fallback .portrait-invitation:focus-visible,
+.immersive-fallback .ofrenda-portrait:focus-visible { outline: 2px solid #e4c190; outline-offset: 4px; }
+.immersive-fallback .ofrenda-portrait { display: flex; }
+.immersive-fallback .ofrenda-portrait img,
+.immersive-fallback .portrait-initial { width: 100%; height: 100%; object-fit: cover; filter: none; align-self: stretch; }
+.immersive-fallback .ofrenda-portrait .portrait-name { position: absolute; inset: auto 8px 8px; color: #fff0d4; background: #211529cc; }
+.immersive-fallback .offering-object { width: clamp(44px, 9vw, 86px); }
+.immersive-fallback .offering-object > img { width: 100%; height: auto; max-height: 90px; filter: drop-shadow(3px 7px 4px #11091699); }
+.immersive-fallback .altar-explore { position: absolute; inset: auto 0 8px; margin: 0; color: #dfc6df; font-size: 10px; }
+/* Memories stick up out of the frame's bottom edge like bookmarks in a book,
+   and rise fully into view when pointed at or focused. */
+.memory-bookmarks {
+  --bookmark-h: 11rem;
+  --bookmark-peek: 7.4rem;
+  --bookmark-w: clamp(8rem, 10vw, 9.5rem);
+  position: relative;
+  z-index: 5;
+  display: flex;
+  justify-content: safe center;
+  align-items: flex-end;
+  gap: clamp(8px, 1vw, 14px);
+  /* Ends before Alebrije, who stands at the conversation's edge. */
+  width: calc(100% - var(--guide-column) - var(--guide-inset) - clamp(200px, 34dvh, 380px) * .79);
+  height: calc(var(--bookmark-h) + 10px);
+  margin: calc(-10px - var(--bookmark-h)) 0 0;
+  padding: 10px 40px 0 150px;
+  overflow: auto hidden;
+  scrollbar-width: none;
+  /* Fades out where the row scrolls on past the visible bookmarks. */
+  mask: linear-gradient(90deg, #000 calc(100% - 40px), transparent);
+  list-style: none;
+  pointer-events: none;
+}
+.memory-bookmarks::-webkit-scrollbar { display: none; }
+/* Hover belongs to the upright column, so a bookmark doesn't flicker as it straightens under the pointer. */
+.memory-bookmarks > li { flex: none; pointer-events: auto; }
+.memory-bookmark {
+  --paper: #292b50;
+  --paper-deep: #1d1d3a;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: var(--bookmark-w);
+  height: var(--bookmark-h);
+  padding: 22px 12px 12px;
+  overflow: hidden;
+  border: 1px solid #b8794399;
+  border-bottom: 0;
+  border-radius: 6px 6px 0 0;
+  background: linear-gradient(120deg, #a26dd014, transparent 50%), linear-gradient(180deg, var(--paper), var(--paper-deep));
+  box-shadow: inset 0 0 0 3px var(--paper), inset 0 0 0 4px #b8794340, 0 -6px 18px #a657d626, 0 -2px 6px #09061099;
+  color: #eddaeb;
+  text-align: left;
+  cursor: pointer;
+  translate: 0 calc(var(--bookmark-h) - var(--bookmark-peek) + var(--sink, 0px));
+  /* At rest each leans from where it meets the frame's edge. */
+  rotate: var(--tilt, 0deg);
+  transform-origin: 50% var(--bookmark-peek);
+  transition: translate .9s cubic-bezier(.22, .8, .3, 1), rotate .9s cubic-bezier(.22, .8, .3, 1), border-color .5s, box-shadow .5s;
+}
+/* The tiled band from the portrait frames, cut along its lower edge like papel picado. */
+.memory-bookmark::before {
+  position: absolute;
+  inset: 4px 4px auto;
+  height: 12px;
+  background: repeating-conic-gradient(#514971 0% 25%, #312a4e 0% 50%) 0 0 / 6px 6px;
+  box-shadow: inset 0 -1px #b8794366;
+  mask: radial-gradient(circle at 50% 100%, transparent 2.5px, #000 3px) 0 0 / 8px 100%;
+  content: "";
+}
+.memory-bookmarks > li:nth-child(3n + 2) .memory-bookmark { --paper: #3a2140; --paper-deep: #261428; }
+.memory-bookmarks > li:nth-child(3n) .memory-bookmark { --paper: #2a1d33; --paper-deep: #1a121f; }
+.memory-bookmarks > li:hover { z-index: 1; }
+.memory-bookmarks > li:hover .memory-bookmark, .memory-bookmark:focus-visible, .memory-bookmark[aria-pressed="true"] {
+  z-index: 1;
+  translate: 0 0;
+  rotate: 0deg;
+  border-color: #e4c190cc;
+  box-shadow: inset 0 0 0 3px var(--paper), inset 0 0 0 4px #e4c19055, 0 -8px 24px #a657d64d, 0 -2px 6px #09061099;
+}
+.memory-bookmark:focus-visible { outline: 2px solid #e4c190; outline-offset: 2px; }
+.bookmark-name { flex: none; color: #e4c190; font-family: var(--font-ui); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+.bookmark-text {
+  display: -webkit-box;
+  flex: none;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  font-family: var(--font-story);
+  font-size: 13px;
+  line-height: 1.35;
+}
+.memory-bookmark:has(.bookmark-image) .bookmark-text { -webkit-line-clamp: 2; }
+.bookmark-image { flex: 1; min-height: 0; width: 100%; border: 1px solid #b8794366; border-radius: 2px; object-fit: cover; }
+.memory-bookmark-all { --bookmark-w: 6.5rem; align-items: center; text-align: center; }
+.memory-bookmarks > li .memory-bookmark-all { --paper: #211529; --paper-deep: #160d1c; }
+.memory-bookmark-all .bookmark-text { color: #dfc6df; font-size: 12px; }
+/* The poem line gives way to the bookmarks once there are memories. */
+.ofrenda-home .ofrenda-room:has(.memory-bookmarks) .scene-invitation { display: none; }
+@media (max-width: 1050px) and (min-width: 781px) {
+  .ofrenda-home .ofrenda-tradition { font-size: 9px; }
+}
+@media (max-width: 780px) {
+  .ofrenda-home .ofrenda-room { min-height: 0; }
+  .ofrenda-home .ofrenda-tradition { top: 6px; right: 4px; color: #d5bc88; }
+  .immersive-stage { height: auto; min-height: 0; aspect-ratio: .82; }
+  .scene-invitation { width: 100%; bottom: 20px; font-size: 12px; }
+  .scene-loading { left: 50%; }
+  .offering-indicator { width: 15px; height: 15px; font-size: 10px; }
+  .ofrenda-home .ofrenda-conversation { margin-top: 0; }
+  .ofrenda-home .ofrenda-conversation::before { background: linear-gradient(180deg, transparent, #100b16ed 90px); }
+  .immersive-fallback { width: 100%; }
+  .memory-bookmarks { --bookmark-h: 9.5rem; --bookmark-peek: 6.2rem; --bookmark-w: 7.6rem; width: 100%; padding-inline: 16px 40px; }
+  .bookmark-text { font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scene-motes i { animation: none; opacity: .25; }
+  .immersive-stage > canvas, .spatial-offerings, .offering-indicator, .sculpted-label, .memory-bookmark { transition: none; }
+}

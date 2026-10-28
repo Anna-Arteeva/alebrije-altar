@@ -1,0 +1,41 @@
+{
+  "name": "dia-del-muerto",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "art:elements": "node --experimental-strip-types --no-warnings --env-file=.env.local scripts/generate-element-art.ts",
+    "check:guardrails": "node --experimental-strip-types --no-warnings scripts/check-guardrails.mts",
+    "check:fidelity": "node --experimental-strip-types --no-warnings scripts/check-memory-fidelity.mts",
+    "check:character": "node --experimental-strip-types --no-warnings scripts/check-character.mts",
+    "check:altar": "node --experimental-strip-types --no-warnings scripts/check-altar-frames.mts",
+    "art:cutout": "node --experimental-strip-types --no-warnings scripts/cutout-character.mts",
+    "art:altar": "node --experimental-strip-types --no-warnings scripts/convert-altar-stl.mts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.118.0",
+    "fflate": "^0.8.3",
+    "idb": "^8.0.4",
+    "next": "16.4.3",
+    "openai": "^7.45.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "three": "^0.186.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/turbopack": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/three": "^0.186.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.3",
+    "meshoptimizer": "^1.1.1",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

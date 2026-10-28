@@ -1,0 +1,45 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "3001"
+      ],
+      "port": 3001
+    },
+    {
+      "name": "start",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "start",
+        "--",
+        "--port",
+        "3005"
+      ],
+      "port": 3005
+    },
+    {
+      "name": "start-offline",
+      "runtimeExecutable": "env",
+      "runtimeArgs": [
+        "OPENAI_API_KEY=",
+        "NEXT_PUBLIC_SUPABASE_URL=",
+        "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=",
+        "npm",
+        "run",
+        "start",
+        "--",
+        "--port",
+        "3006"
+      ],
+      "port": 3006
+    }
+  ]
+}
